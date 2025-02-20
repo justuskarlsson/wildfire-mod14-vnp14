@@ -1,0 +1,20 @@
+earthengine-api
+notebook
+numpy
+Pillow
+wandb
+netcdf4
+fire
+ninja
+earthaccess
+tqdm
+lightning
+h5py
+einops
+timm
+ipywidgets
+pyhdf
+matplotlib
+# For vis
+# torchshow
+# fastapi[standard]

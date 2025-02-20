@@ -1,0 +1,11 @@
+.vscode
+__pycache__
+*egg-info
+wandb
+lightning_logs
+*.png
+*.gif
+*_results
+runs
+*.tif
+items.json

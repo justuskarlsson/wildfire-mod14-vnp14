@@ -1,0 +1,5 @@
+name: wildfire-mod14-vnp14
+
+dependencies:
+  - python=3.10
+  - gdal=3.9.0

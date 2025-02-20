@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Simple TorchShow SPA</title>
+</head>
+
+<body>
+    <div>
+        <label>Epoch:</label>
+        <input id="epoch" type="number" value="6">
+        <label>Idx:</label>
+        <input id="idx" type="number" value="38">
+        <button onclick="updatePlot()">Show</button>
+    </div>
+    <div>
+        <img id="plot" src="">
+    </div>
+    <script>
+        document.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                updatePlot();
+            }
+        });
+        function updatePlot() {
+            const epoch = document.getElementById('epoch').value;
+            const idx = document.getElementById('idx').value;
+            document.getElementById('plot').src = `/plot?epoch=${epoch}&idx=${idx}`;
+        }
+    </script>
+</body>
+
+</html>
