@@ -1,6 +1,5 @@
 ## TODO
 * Raw bands vis cmp with fire mask
-* Move notebook figure vis to run_figures.py
 * Code for extracing **used** data to publish 
 
 ## Installation
