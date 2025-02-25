@@ -1,6 +1,3 @@
-## TODO
-* Raw bands vis cmp with fire mask
-* Code for extracing **used** data to publish 
 
 ## Installation
 ```

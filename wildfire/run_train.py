@@ -1,3 +1,4 @@
+import shutil
 import time
 from einops import reduce
 import fire
@@ -93,6 +94,74 @@ def pick_samples_save(**kwargs):
     save(train, "train")
     save(val, "val")
     save(test, "test")
+
+
+def extract_datasets(out_dir: str, **kwargs):
+    if kwargs:
+        init_config(**kwargs)
+    os.makedirs(out_dir, exist_ok=True)
+
+    def load_samples(name):
+        path = os.path.join(config.h5_dir, f"{name}.json")
+        samples = json_load(path)
+        samples = [Sample(**sample) for sample in samples]
+        return samples
+
+    sensors = ["viirs", "modis"]
+
+    def get_dst_path(path: str) -> str:
+        rel_path = os.path.relpath(path, config.h5_dir)
+        return os.path.join(out_dir, rel_path)
+
+    def copy_samples(src_path, dst_path, samples, dates=None):
+        print(f"Copying {src_path} to {dst_path}")
+        h5 = h5py.File(src_path, "r")
+        if dates is None:
+            dates = list(h5["num_fire_pixels_by_day"].keys())
+        if os.path.exists(dst_path):
+            print(f"Skipping {dst_path} because it already exists")
+            return dates
+        os.makedirs(os.path.dirname(dst_path), exist_ok=True)
+        h5_out = h5py.File(dst_path, "w")
+        if dates is None:
+            h5.copy("num_fire_pixels_by_day", h5_out)
+        for sample in tqdm(samples):
+            xy = H5Grid.get_cell_path(sample.x, sample.y)
+            path_full = "/".join(["cells", xy, dates[sample.t]])
+            if path_full not in h5:
+                continue
+            path_parent = "/".join(["cells", xy])
+            if path_parent not in h5_out:
+                h5_out.create_group(path_parent)
+            dst = h5_out[path_parent]
+            h5.copy(path_full, dst)
+        return dates
+
+    train = load_samples("train")
+    val = load_samples("val")
+    test = load_samples("test")
+    for sensor in sensors:
+        train_h5 = h5_get_path(sensor, False)
+        dates_train = copy_samples(
+            train_h5, get_dst_path(train_h5), train + val
+        )
+        test_h5 = h5_get_path(sensor, True)
+        dates_test = copy_samples(test_h5, get_dst_path(test_h5), test)
+        print(f"Copied {sensor}")
+
+    for t in ["train", "val", "test"]:
+        src = os.path.join(config.h5_dir, f"{t}.json")
+        dst = os.path.join(out_dir, f"{t}.json")
+        shutil.copy(src, dst)
+
+    for aux in ["drought", "era5"]:
+        train_h5 = h5_get_path(aux, False)
+        copy_samples(
+            train_h5, get_dst_path(train_h5), train + val, dates=dates_train
+        )
+        test_h5 = h5_get_path(aux, True)
+        copy_samples(test_h5, get_dst_path(test_h5), test, dates=dates_test)
+        print(f"Copied {aux}")
 
 
 class FinetuneTrainer(LightningModule):
