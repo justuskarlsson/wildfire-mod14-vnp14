@@ -103,7 +103,6 @@ class Config:
 
     @property
     def h5_dir(self):
-        # return os.path.join(self.root_path, "h5_dev")
         return os.path.join(self.root_path, "h5")
 
     @property

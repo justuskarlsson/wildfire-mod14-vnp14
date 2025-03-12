@@ -1,3 +1,6 @@
+## Links
+* [Arxiv Paper](https://arxiv.org/abs/2503.08580)
+* Dataset: 10.5281/zenodo.15013477
 
 ## Installation
 ```
@@ -7,21 +10,3 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-
-
-#### Misc
-If using vis, torchshow:
-<path_to>/torchshow/visualization.py
-```python
-from packaging.version import Version
-
-def set_window_title(fig, title):
-    """
-    Set the title of the figure window (effective when using a interactive backend.)
-    """
-    # fig.canvas.set_window_title(title)
-    if Version(matplotlib.__version__) < Version('3.4'):
-        fig.canvas.set_window_title(title)
-    else:
-        fig.canvas.manager.set_window_title(title)
-```

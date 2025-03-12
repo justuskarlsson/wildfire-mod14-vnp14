@@ -33,7 +33,7 @@ def _normalization(dataset: WildfireDataset, dst_path: str):
         # Last idx is "idx"
         co = 0
         for key in keys:
-            if key == "idx" or "tyx" in key:
+            if key == "idx" or "tyx" in key or "fire_mask" in key:
                 continue
             x = batch[key].to(torch.float64)
             length = x.shape[1]
@@ -116,14 +116,15 @@ def extract_datasets(out_dir: str, **kwargs):
     def copy_samples(src_path, dst_path, samples, dates=None):
         print(f"Copying {src_path} to {dst_path}")
         h5 = h5py.File(src_path, "r")
-        if dates is None:
+        dates_was_none = dates is None
+        if dates_was_none:
             dates = list(h5["num_fire_pixels_by_day"].keys())
         if os.path.exists(dst_path):
             print(f"Skipping {dst_path} because it already exists")
             return dates
         os.makedirs(os.path.dirname(dst_path), exist_ok=True)
         h5_out = h5py.File(dst_path, "w")
-        if dates is None:
+        if dates_was_none and "num_fire_pixels_by_day" not in h5_out:
             h5.copy("num_fire_pixels_by_day", h5_out)
         for sample in tqdm(samples):
             xy = H5Grid.get_cell_path(sample.x, sample.y)
