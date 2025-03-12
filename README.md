@@ -15,3 +15,15 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+The most basic command (training with VIIRS):
+```
+python wildfire/run_train.py finetune
+```
+
+Everything in `Config` can be modified as command line argument, like: 
+```
+python wildfire/run_train.py finetune --is_modis True
+```
+
+Look in `scripts` for more examples.
+
