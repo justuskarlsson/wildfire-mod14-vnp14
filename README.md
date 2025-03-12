@@ -1,8 +1,13 @@
 ## Links
 * [Arxiv Paper](https://arxiv.org/abs/2503.08580)
-* Dataset: 10.5281/zenodo.15013477
+* [Dataset](https://zenodo.org/records/15013477)
+
 
 ## Installation
+
+Download the dataset zip. Extract into some folder. In `data_types.py` change `root_path` to point to the folder. This folder should have the subfolder "dataset" that was extracted from the zip file.
+
+Then, install enviornment:
 ```
 conda env create -f environment.yaml
 pip install torch==2.3.1+cu121 -f https://download.pytorch.org/whl/cu121/torch_stable.html

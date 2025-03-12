@@ -103,7 +103,7 @@ class Config:
 
     @property
     def h5_dir(self):
-        return os.path.join(self.root_path, "h5")
+        return os.path.join(self.root_path, "dataset")
 
     @property
     def sensor(self):
